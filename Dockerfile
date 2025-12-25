@@ -1,60 +1,30 @@
-# syntax=docker.io/docker/dockerfile:1
+# Use Bun for both build and runtime (native bun:sqlite support)
+FROM oven/bun:1.3.4-alpine
 
-FROM node:20-alpine AS base
-
-# Install dependencies only when needed
-FROM base AS deps
 WORKDIR /app
 
-# Copy package files (we use package-lock.json)
-COPY package.json package-lock.json* ./
-RUN npm ci
+# Copy package files
+COPY package.json bun.lock ./
 
-# Rebuild the source code only when needed
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+# Install dependencies
+RUN bun install --frozen-lockfile
+
+# Copy all source code
 COPY . .
 
-# Disable telemetry
-ENV NEXT_TELEMETRY_DISABLED=1
-
 # Build Next.js app
-RUN npm run build
-
-# Production image, copy all the files and run next
-FROM base AS runner
-WORKDIR /app
-
-ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
-
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+ENV NODE_ENV=production
+RUN bun run build
 
 # Create data directory for SQLite
-RUN mkdir -p /app/data && chown nextjs:nodejs /app/data
+RUN mkdir -p /app/data
 
-# Copy public assets
-COPY --from=builder /app/public ./public
-
-# Copy standalone output
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-# Copy source files for background worker
-COPY --from=builder --chown=nextjs:nodejs /app/src ./src
-COPY --from=builder --chown=nextjs:nodejs /app/lib ./lib
-
-# Install tsx globally for running TypeScript background worker
-RUN npm install -g tsx
-
-USER nextjs
-
+# Expose port
 EXPOSE 3000
 
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# Run background worker and Next.js server
-CMD ["sh", "-c", "tsx src/background/index.ts & exec node server.js"]
+# Run background worker and Next.js server with Bun runtime
+CMD ["sh", "-c", "bun run src/background/index.ts & exec bun run .next/standalone/server.js"]
