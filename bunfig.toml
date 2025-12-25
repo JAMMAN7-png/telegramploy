@@ -1,0 +1,7 @@
+[install]
+# Install exact versions
+exact = true
+
+[run]
+# Use --bun flag by default
+bun = true
