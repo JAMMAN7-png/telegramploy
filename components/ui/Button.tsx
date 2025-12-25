@@ -20,7 +20,7 @@ export function Button({ variant = 'primary', children, className = '', ...props
       className={`btn-brutal ${variantClasses[variant]} ${className}`}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      {...props}
+      {...(props as any)}
     >
       {children}
     </motion.button>

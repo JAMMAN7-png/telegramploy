@@ -90,7 +90,7 @@ export function getRetryQueueReady(db: Database) {
 
 export function updateRetryAttempt(db: Database, id: number, attempts: number, errorMessage: string) {
   const delays = [60000, 300000, 900000, 3600000, 21600000, 86400000];
-  const delay = delays[Math.min(attempts, delays.length - 1)];
+  const delay = delays[Math.min(attempts, delays.length - 1)] || 60000;
   const nextRetry = new Date(Date.now() + delay).toISOString();
 
   const query = db.query(`

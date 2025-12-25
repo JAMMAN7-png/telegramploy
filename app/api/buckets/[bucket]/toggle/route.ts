@@ -5,7 +5,7 @@ import { updateBucketEnabled } from '@/lib/db/queries';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { bucket: string } }
+  { params }: { params: Promise<{ bucket: string }> }
 ) {
   try {
     // Check authentication
@@ -14,7 +14,7 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { bucket } = params;
+    const { bucket } = await params;
 
     // Validate bucket name
     if (!bucket || typeof bucket !== 'string' || bucket.length === 0) {

@@ -141,6 +141,7 @@ export class FileProcessor {
     try {
       for (let i = 0; i < chunks.length; i++) {
         const chunk = chunks[i];
+        if (!chunk) continue;
 
         console.log(`📤 Sending chunk ${i + 1}/${chunks.length}...`);
 
