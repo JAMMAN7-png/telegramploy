@@ -1,9 +1,15 @@
-# Simple single-stage Dockerfile for TelegramPloy
-FROM oven/bun:1.3.4-alpine
+# Use Node.js 20 Alpine for smaller image size
+FROM node:20-alpine
 
 WORKDIR /app
 
-# Install dependencies
+# Install dependencies for better compatibility
+RUN apk add --no-cache libc6-compat
+
+# Install Bun for running the background worker
+RUN npm install -g bun
+
+# Copy package files and install dependencies
 COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile
 
