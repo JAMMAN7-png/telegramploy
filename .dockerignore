@@ -60,3 +60,16 @@ data/
 tmp/
 temp/
 *.tmp
+
+# Session state and deployment files
+SESSION_STATE.md
+NEXT_SESSION_PROMPT.txt
+analyze_deployments.py
+webhook_config.json
+deployment_response.json
+compose_status.json
+webhook_response.json
+
+# Bun lockfile (using npm)
+bun.lock
+bun.lockb

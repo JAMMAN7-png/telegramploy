@@ -1,17 +1,17 @@
-import { Database } from 'bun:sqlite';
+import Database from 'better-sqlite3';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-let db: Database | null = null;
+let db: Database.Database | null = null;
 
-export function getDatabase(): Database {
+export function getDatabase(): Database.Database {
   if (!db) {
     const dbPath = process.env.DATABASE_PATH || './data/telegramploy.db';
-    db = new Database(dbPath, { create: true });
+    db = new Database(dbPath);
 
     // Enable WAL mode for better concurrency
-    db.run('PRAGMA journal_mode = WAL');
-    db.run('PRAGMA foreign_keys = ON');
+    db.pragma('journal_mode = WAL');
+    db.pragma('foreign_keys = ON');
 
     // Run migrations
     initializeSchema(db);
@@ -20,12 +20,12 @@ export function getDatabase(): Database {
   return db;
 }
 
-function initializeSchema(database: Database) {
+function initializeSchema(database: Database.Database) {
   const schemaPath = join(__dirname, 'schema.sql');
   const schema = readFileSync(schemaPath, 'utf-8');
 
   // Execute schema
-  database.run(schema);
+  database.exec(schema);
 
   console.log('✅ Database initialized');
 }

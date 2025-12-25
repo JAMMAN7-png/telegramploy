@@ -6,6 +6,8 @@ const nextConfig: NextConfig = {
   output: 'standalone',
   // Empty turbopack config to use Next.js 16 default (Turbopack)
   turbopack: {},
+  // Disable font optimization to allow offline builds
+  optimizeFonts: false,
   webpack: (config, { isServer }) => {
     if (isServer) {
       // Mark bun:sqlite as external so it's not bundled during build
