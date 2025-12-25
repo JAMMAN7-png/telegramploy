@@ -6,7 +6,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "background": "bun run src/background/index.ts"
+    "background": "bun run src/background/index.ts",
+    "test:deploy": "bun run scripts/test-deployment.ts"
   },
   "devDependencies": {
     "@types/bcryptjs": "^3.0.0",
