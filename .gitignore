@@ -2,6 +2,7 @@ node_modules/
 .next/
 .env
 .env.local
+.env.production
 *.db
 *.log
 out/
@@ -10,3 +11,6 @@ dist/
 tmp/
 data/
 .vercel
+
+# Session state with credentials - DO NOT COMMIT
+SESSION_STATE.md
