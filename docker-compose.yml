@@ -8,49 +8,30 @@ services:
     container_name: telegramploy
     restart: unless-stopped
 
-    # Environment variables (override in Dokploy)
     environment:
-      # Database
       - DATABASE_PATH=/app/data/telegramploy.db
-
-      # S3 Configuration (RustFS)
-      - S3_ENDPOINT=https://your-rustfs-endpoint.com
+      - S3_ENDPOINT=https://api.s3.v244.net
       - S3_REGION=us-east-1
-      - S3_ACCESS_KEY_ID=your-access-key
-      - S3_SECRET_ACCESS_KEY=your-secret-key
+      - S3_ACCESS_KEY_ID=pishro
+      - S3_SECRET_ACCESS_KEY=ESLIsfcD2whxPlr9VpSZNj4zVlWb9jkY
       - S3_FORCE_PATH_STYLE=true
-
-      # Telegram Bot
-      - TELEGRAM_BOT_TOKEN=your-bot-token
-      - TELEGRAM_CHAT_ID=your-chat-id
-
-      # Next-Auth
-      - NEXTAUTH_URL=https://telegramploy.dok.v244.net
-      - NEXTAUTH_SECRET=your-generated-secret
-
-      # Polling Configuration
+      - TELEGRAM_BOT_TOKEN=8291047806:AAH3_QpL6b9L-t6ggKfGCqgY8ZqjQ4DxWqk
+      - TELEGRAM_CHAT_ID=38962624
+      - NEXTAUTH_URL=https://backup.v244.net
+      - NEXTAUTH_SECRET=0F0CC673aCyrZVA/DHfM3qpFGkGtcNsclP0DLi8gKV8=
       - POLL_INTERVAL_MS=60000
       - MAX_FILE_SIZE_MB=2000
       - CHUNK_SIZE_MB=50
-
-      # Node Environment
       - NODE_ENV=production
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
 
     # Persistent volume for SQLite database
     volumes:
       - telegramploy-data:/app/data
 
-    # Expose port 3000
     ports:
-      - "3000:3000"
-
-    # Health check
-    healthcheck:
-      test: ["CMD", "bun", "run", "-e", "fetch('http://localhost:3000/api/health').then(r => r.ok ? process.exit(0) : process.exit(1)).catch(() => process.exit(1))"]
-      interval: 30s
-      timeout: 10s
-      start_period: 40s
-      retries: 3
+      - "3000"
 
 volumes:
   telegramploy-data:
