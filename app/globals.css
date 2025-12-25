@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-black;
+  }
+}
+
+@layer components {
+  .btn-brutal {
+    @apply px-6 py-3 font-bold border-4 border-black shadow-brutal transition-all;
+    @apply hover:translate-x-1 hover:translate-y-1 hover:shadow-none;
+    @apply active:translate-x-2 active:translate-y-2 active:shadow-none;
+  }
+
+  .btn-brutal-primary {
+    @apply btn-brutal bg-neon-cyan text-black;
+  }
+
+  .btn-brutal-danger {
+    @apply btn-brutal bg-neon-magenta text-white;
+  }
+
+  .card-brutal {
+    @apply bg-dark-card border-4 border-neon-cyan p-6 shadow-brutal-lg;
+  }
+
+  .input-brutal {
+    @apply w-full px-4 py-3 border-4 border-black bg-dark-card text-white font-bold;
+    @apply focus:outline-none focus:border-neon-cyan focus:shadow-brutal;
+  }
+}
